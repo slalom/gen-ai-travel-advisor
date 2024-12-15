@@ -1,0 +1,10 @@
+src/infra/**.js
+src/infra/**.d.ts
+node_modules
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+git
+
+.DS_Store

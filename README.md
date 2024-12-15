@@ -9,3 +9,16 @@ This repository contains a Proof of Concept (POC) for building a Retrieval-Augme
 This POC showcases a RAG-based chatbot architecture, integrating multiple AWS services:
 
 ![Architecture Diagram](/RAG-Chat-bot.jpeg)
+
+## Development Setup
+
+1. [Install Node.js](https://nodejs.org/en/download/prebuilt-installer)
+
+## Useful commands
+
+* `npm run build`   compile typescript to js
+* `npm run watch`   watch for changes and compile
+* `npm run test`    perform the jest unit tests
+* `npx aws-cdk deploy`  deploy this stack to your default AWS account/region
+* `npx aws-cdk diff`    compare deployed stack with current state
+* `npx aws-cdk synth`   emits the synthesized CloudFormation template
