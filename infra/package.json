@@ -1,0 +1,36 @@
+{
+  "name": "aws-rag-chatbot-poc-infra",
+  "version": "1.0.0",
+  "description": "Infrastructure for RAG-based Conversational AI System using AWS CDK (TypeScript).",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk",
+    "synth": "cdk synth",
+    "deploy": "cdk deploy",
+    "destroy": "cdk destroy",
+    "lint": "eslint . --ext .ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-apigateway": "^1.203.0",
+    "@aws-cdk/aws-lambda": "^1.203.0",
+    "@aws-cdk/aws-opensearchservice": "^1.203.0",
+    "aws-cdk-lib": "^2.173.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.1",
+    "@types/node": "^20.0.0",
+    "eslint": "^8.0.0",
+    "@types/jest": "^29.0.0",
+    "jest": "^29.0.0",
+    "aws-cdk": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=8.0.0"
+  },
+  "license": "MIT"
+}
