@@ -15,7 +15,7 @@ export class ApiGatewayStack extends cdk.Stack {
     });
 
     // Support Agent Lambda
-    const supportAgentLambda = new lambda.Function(this, 'SupportAgentLambda', {
+    new lambda.Function(this, 'SupportAgentLambda', {
       runtime: lambda.Runtime.PYTHON_3_9,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('lambda/support-agent-lambda'),

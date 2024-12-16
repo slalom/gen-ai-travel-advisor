@@ -3,6 +3,7 @@ cdk.out/
 cdk.context.json
 *.js
 *.d.ts
+build/
 
 # Node.js
 node_modules/
