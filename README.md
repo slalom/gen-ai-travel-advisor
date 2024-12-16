@@ -16,9 +16,13 @@ This POC showcases a RAG-based chatbot architecture, integrating multiple AWS se
 
 ## Useful commands
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `npx aws-cdk deploy`  deploy this stack to your default AWS account/region
-* `npx aws-cdk diff`    compare deployed stack with current state
-* `npx aws-cdk synth`   emits the synthesized CloudFormation template
+* `npm run client-dev` Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+* `npm run client-build` build the client code.
+* `npm run infra-deploy` deploy this stack to your default AWS account/region
+
+## Local UI Development
+
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

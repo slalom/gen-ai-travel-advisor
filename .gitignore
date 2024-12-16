@@ -1,5 +1,5 @@
-src/infra/**.js
-src/infra/**.d.ts
+**/**.js
+**/**.d.ts
 node_modules
 
 # CDK asset staging directory
@@ -7,4 +7,16 @@ node_modules
 cdk.out
 git
 
+# misc
 .DS_Store
+
+# next.js
+**/.next/
+/out/
+**/dist/
+
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
