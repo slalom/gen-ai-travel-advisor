@@ -9,3 +9,7 @@ This repository contains a Proof of Concept (POC) for building a Retrieval-Augme
 This POC showcases a RAG-based chatbot architecture, integrating multiple AWS services:
 
 ![Architecture Diagram](/RAG-chat-bot.jpeg)
+
+## Development
+
+Deploying this code requires the `AWS_ACCOUNT_ID` to be defined.
