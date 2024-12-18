@@ -1,47 +1,56 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { Bucket } from 'aws-cdk-lib/aws-s3';
-import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
+import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import path from 'path';
-import { PolicyStatement, Effect, AnyPrincipal } from 'aws-cdk-lib/aws-iam';
-
-import dotenv from 'dotenv';
-dotenv.config()
-
-
-const awsAccountId = process.env.AWS_ACCOUNT_ID;
 
 export class StaticWebsiteStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const webisteBucket = new Bucket(this, `${id}Websitebucket`, {
-      bucketName: `${id.toLowerCase()}-website-bucket-${awsAccountId}`,
-      websiteIndexDocument: 'index.html',
-      blockPublicAccess: {
-        blockPublicAcls: false,
-        ignorePublicAcls: false,
-        restrictPublicBuckets: false,
-        blockPublicPolicy: false,
-      },
+    const awsAccountId = process.env.AWS_ACCOUNT_ID;
+
+    const websiteBucket = new s3.Bucket(this, 'WebsiteBucket', {
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL, 
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
+      bucketName: `${id.toLowerCase()}-website-bucket-${awsAccountId}`, 
+    });
+  
+    const originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI', {
+      comment: 'OAI for CloudFront to access S3 bucket securely',
     });
 
-    webisteBucket.addToResourcePolicy(new PolicyStatement({
-      effect: Effect.ALLOW,
-      principals: [
-          new AnyPrincipal,
-        ],
-        actions: [
-          's3:GetObject', 
-        ],
-        resources: [
-          `${webisteBucket.bucketArn}/*`,
-        ]
-    }));
+    websiteBucket.addToResourcePolicy(
+      new iam.PolicyStatement({
+        actions: ['s3:GetObject'],
+        resources: [`${websiteBucket.bucketArn}/*`],
+        principals: [new iam.CanonicalUserPrincipal(originAccessIdentity.cloudFrontOriginAccessIdentityS3CanonicalUserId)],
+      }),
+    );
 
-    new BucketDeployment(this, `${id}WebsiteAssets`, {
-      destinationBucket: webisteBucket,
-      sources: [Source.asset(path.join(__dirname, '../../client/', 'dist'))],
+    const distribution = new cloudfront.Distribution(this, 'WebsiteDistribution', {
+      defaultBehavior: {
+        origin: new origins.S3Origin(websiteBucket, { originAccessIdentity }), // TODO: S3Origin is deprecated - need to add other way to create distribution
+        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS, 
+      },
+      defaultRootObject: 'index.html',
+      comment: 'CloudFront distribution for private S3 static website',
+    });
+
+    new s3deploy.BucketDeployment(this, 'DeployWebsite', {
+      sources: [s3deploy.Source.asset(path.join(__dirname, '../../client', 'dist'))],
+      destinationBucket: websiteBucket,
+      distribution,
+      distributionPaths: ['/*'],
+    });
+
+    new cdk.CfnOutput(this, 'CloudFrontURL', {
+      value: `https://${distribution.distributionDomainName}`,
+      description: 'URL of the CloudFront distribution serving the website',
     });
   }
 }
