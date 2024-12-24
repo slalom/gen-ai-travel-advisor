@@ -1,5 +1,2 @@
 def handler(event, context):
-    return {
-        "statusCode": 200,
-        "body": "Hello from Embeddings Lambda!"
-    }
+    return {"statusCode": 200, "body": "Hello from Embeddings Lambda!"}
