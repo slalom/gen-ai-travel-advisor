@@ -1,0 +1,68 @@
+{
+    "categories": [
+      {
+        "category": "Destinations",
+        "data": [
+          {
+            "question": "What are the top attractions in Paris?",
+            "answer": "The top attractions in Paris include the Eiffel Tower, Louvre Museum, Notre-Dame Cathedral, Sacré-Cœur Basilica, and the Champs-Élysées."
+          },
+          {
+            "question": "What are the best destinations to visit in Italy?",
+            "answer": "Some of the best destinations in Italy include Rome, Florence, Venice, Amalfi Coast, and Cinque Terre."
+          },
+          {
+            "question": "What are the must-see places in New York City?",
+            "answer": "The must-see places in New York City include Times Square, Central Park, the Statue of Liberty, Empire State Building, and the Metropolitan Museum of Art."
+          },
+          {
+            "question": "What are the highlights of visiting Tokyo?",
+            "answer": "Highlights of visiting Tokyo include the Tokyo Tower, Shibuya Crossing, Senso-ji Temple, Akihabara, and Tsukiji Market."
+          }
+        ]
+      },
+      {
+        "category": "Travel Tips",
+        "data": [
+          {
+            "question": "Do I need a visa for Japan?",
+            "answer": "Visitors from many countries can enter Japan for tourism without a visa for up to 90 days. Check the official Japanese immigration website for your country’s requirements."
+          },
+          {
+            "question": "What is the best time to visit Bali?",
+            "answer": "The best time to visit Bali is during the dry season, which runs from April to October."
+          },
+          {
+            "question": "How can I save money on flights?",
+            "answer": "To save money on flights, book in advance, use flight comparison websites, be flexible with travel dates, and consider budget airlines."
+          },
+          {
+            "question": "What should I pack for a trip to a cold destination?",
+            "answer": "For a cold destination, pack thermal layers, a warm coat, gloves, a hat, scarves, and insulated boots."
+          }
+        ]
+      },
+      {
+        "category": "General Travel Information",
+        "data": [
+          {
+            "question": "What is the currency used in Australia?",
+            "answer": "The currency used in Australia is the Australian Dollar (AUD)."
+          },
+          {
+            "question": "What are the top travel apps to use?",
+            "answer": "Some top travel apps include Google Maps, Skyscanner, TripIt, Airbnb, and Uber."
+          },
+          {
+            "question": "How can I ensure safety while traveling abroad?",
+            "answer": "Ensure safety by keeping copies of important documents, being aware of your surroundings, avoiding risky areas, and staying updated on travel advisories."
+          },
+          {
+            "question": "What are the basic phrases to know when traveling to Spain?",
+            "answer": "Basic phrases include 'Hola' (Hello), 'Gracias' (Thank you), '¿Cuánto cuesta?' (How much does it cost?), and '¿Dónde está?' (Where is?)."
+          }
+        ]
+      }
+    ]
+  }
+  
