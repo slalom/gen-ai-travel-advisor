@@ -2,9 +2,15 @@ import * as cdk from 'aws-cdk-lib';
 import { ApiGatewayStack } from '../lib/api-gateway-stack';
 import { BedrockAgentStack } from '../lib/bedrock-agent-stack';
 import { StaticWebsiteStack } from '../lib/static-website-stack';
+import { OpenSearchStack } from '../lib/open-search-stack';
+import { KnowledgeBaseStack } from '../lib/knowledge-base-stack';
+
 
 const app = new cdk.App();
 
 new ApiGatewayStack(app, 'RAGChatBotApiGateway');
 new BedrockAgentStack(app, 'RAGBedrockAgentStack');
-new StaticWebsiteStack(app, 'RAGChatBotWebsite')
+new StaticWebsiteStack(app, 'RAGChatBotWebsite');
+const opensearchStack = new OpenSearchStack(app, 'RAGOpenSearchStack');
+const knowledgebaseStack = new KnowledgeBaseStack(app, 'RAGKnowledgeBaseStack');
+knowledgebaseStack.addDependency(opensearchStack);

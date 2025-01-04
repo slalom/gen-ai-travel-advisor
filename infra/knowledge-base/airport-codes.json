@@ -1,0 +1,52 @@
+[
+    {
+        "Airport Code":"LAX",
+        "City Name":"Los Angeles",
+        "Country":"United States"
+    },
+    {
+        "Airport Code":"JFK",
+        "City Name":"New York",
+        "Country":"United States"
+    },
+    {
+        "Airport Code":"ORD",
+        "City Name":"Chicago",
+        "Country":"United States"
+    },
+    {
+        "Airport Code":"ATL",
+        "City Name":"Atlanta",
+        "Country":"United States"
+    },
+    {
+        "Airport Code":"DFW",
+        "City Name":"Dallas",
+        "Country":"United States"
+    },
+    {
+        "Airport Code":"SFO",
+        "City Name":"San Francisco",
+        "Country":"United States"
+    },
+    {
+        "Airport Code":"SEA",
+        "City Name":"Seattle",
+        "Country":"United States"
+    },
+    {
+        "Airport Code":"DEN",
+        "City Name":"Denver",
+        "Country":"United States"
+    },
+    {
+        "Airport Code":"MIA",
+        "City Name":"Miami",
+        "Country":"United States"
+    },
+    {
+        "Airport Code":"BOS",
+        "City Name":"Boston",
+        "Country":"United States"
+    }
+]

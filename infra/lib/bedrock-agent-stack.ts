@@ -58,9 +58,9 @@ export class BedrockAgentStack extends cdk.Stack {
       }));
 
     
-    const bedrockAgent = new bedrock.CfnAgent(this, 'BedrockAgent', {
-      agentName: 'MySimpleAgent',
-      description: 'A simple Bedrock Agent for testing',
+    const bedrockAgent = new bedrock.CfnAgent(this, 'BedrockAgentStack', {
+      agentName: 'gen-ai-travel-advisor',
+      description: `AI-powered travel advisor agent stack providing real-time flight prices, current time retrieval, and basic arithmetic functions for seamless user travel assistance.`,
       agentResourceRoleArn: agentRole.roleArn,
       foundationModel: 'anthropic.claude-3-sonnet-20240229-v1:0',
       instruction: `You are a helpful AI-powered travel advisor. Your role is to assist users by answering travel-related questions, providing recommendations, and retrieving real-time information when needed. 
@@ -80,7 +80,16 @@ export class BedrockAgentStack extends cdk.Stack {
         - When invoking a function, ensure all required parameters are included. Ask follow-up questions to gather missing parameters.
         - Always return the results to the user in an easy-to-understand format.
         - Never make assumptions about parameter values unless explicitly provided by the user.
-        - Maintain a professional and friendly tone in all responses.`,
+        - Maintain a professional and friendly tone in all responses.
+        - Always organize the response into clear, easy-to-read sections or bullet points.
+        - Include essential details like dates, prices, or other key data.
+        
+        Important Notes:
+        Airport Codes Usage:
+
+        The knowledge base contains a comprehensive list of airport codes for cities worldwide.
+        If a user provides a city name instead of an airport code, attempt to match it using the knowledge base. For example, if the user mentions "Los Angeles," suggest "LAX" as the airport code.
+        Respond with: "I noticed you mentioned [city]. Did you mean [airport code]? If not, please provide the airport code for better accuracy."`,
       actionGroups: [
         {
           actionGroupName: 'GetTimeActionGroup',
