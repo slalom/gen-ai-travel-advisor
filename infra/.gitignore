@@ -23,7 +23,7 @@ __pycache__/
 *.virtualenv/
 venv/
 .Python
-lambda/flight/requests-layer/python/
+lambda/common-layer/python
 
 # IDEs and editors
 .vscode/
