@@ -24,7 +24,7 @@ export class BedrockAgentStack extends cdk.Stack {
     });
 
     const requestsLayer = new lambda.LayerVersion(this, 'RequestsLayer', {
-        code: lambda.Code.fromAsset('lambda/flight/requests-layer.zip'),
+        code: lambda.Code.fromAsset('lambda/common-layer/common-layer.zip'),
         compatibleRuntimes: [lambda.Runtime.PYTHON_3_9],
         description: 'A layer containing the requests library',
       });
@@ -183,9 +183,10 @@ export class BedrockAgentStack extends cdk.Stack {
     })
 
     // Output the Bedrock Agent ARN
-    new cdk.CfnOutput(this, 'BedrockAgentArn', {
-      value: bedrockAgent.attrAgentArn,
-      description: 'The ARN of the Bedrock Agent',
+    new cdk.CfnOutput(this, 'BedrockAgentID', {
+      value: bedrockAgent.attrAgentId,
+      description: 'The ID of the Bedrock Agent',
+      exportName: 'BedrockAgentID'
     });
   }
 }

@@ -8,9 +8,10 @@ import { KnowledgeBaseStack } from '../lib/knowledge-base-stack';
 
 const app = new cdk.App();
 
-new ApiGatewayStack(app, 'RAGChatBotApiGateway');
-new BedrockAgentStack(app, 'RAGBedrockAgentStack');
 new StaticWebsiteStack(app, 'RAGChatBotWebsite');
+const bedrockAgent = new BedrockAgentStack(app, 'RAGBedrockAgentStack');
 const opensearchStack = new OpenSearchStack(app, 'RAGOpenSearchStack');
 const knowledgebaseStack = new KnowledgeBaseStack(app, 'RAGKnowledgeBaseStack');
 knowledgebaseStack.addDependency(opensearchStack);
+const apigateway = new ApiGatewayStack(app, 'RAGChatBotApiGateway');
+apigateway.addDependency(bedrockAgent);
