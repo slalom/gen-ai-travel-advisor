@@ -289,6 +289,12 @@ export class KnowledgeBaseStack extends cdk.Stack {
         value: vectorSearchCollection.attrCollectionEndpoint,
         description: 'OpenSearch Collection ARN',
         exportName: 'OpenSearchEndpoint',
-      });
+    });
+
+    new cdk.CfnOutput(this, 'KnowledgeBaseId', {
+      value: kb.attrKnowledgeBaseId,
+      description: 'KnowledgeBaseId',
+      exportName: 'KnowledgeBaseId',
+    });
   }
 }
