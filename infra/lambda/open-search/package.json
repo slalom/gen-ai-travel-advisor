@@ -1,0 +1,16 @@
+{
+  "name": "open-search-lambda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@opensearch-project/opensearch": "^2.0.0", 
+    "@aws-sdk/credential-provider-node": "^3.686.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
