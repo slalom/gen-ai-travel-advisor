@@ -8,6 +8,8 @@ export class BedrockAgentStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    const knowledgeBaseId = cdk.Fn.importValue('KnowledgeBaseId');
+
     const getTimeLambda = new lambda.Function(this, 'GetTimeLambda', {
         runtime: lambda.Runtime.PYTHON_3_9,
         handler: 'index.handler',
@@ -63,6 +65,10 @@ export class BedrockAgentStack extends cdk.Stack {
       description: `AI-powered travel advisor agent stack providing real-time flight prices, current time retrieval, and basic arithmetic functions for seamless user travel assistance.`,
       agentResourceRoleArn: agentRole.roleArn,
       foundationModel: 'anthropic.claude-3-sonnet-20240229-v1:0',
+      knowledgeBases: [{
+        description: 'knowledge base for travel advisor agent',
+        knowledgeBaseId: knowledgeBaseId
+      }],
       instruction: `You are a helpful AI-powered travel advisor. Your role is to assist users by answering travel-related questions, providing recommendations, and retrieving real-time information when needed. 
         You have access to the following functions:
 
@@ -167,9 +173,8 @@ export class BedrockAgentStack extends cdk.Stack {
                     },
                   },
                 ],
-              },              
-          }
-          
+            },              
+        }  
       ],
     });
       
