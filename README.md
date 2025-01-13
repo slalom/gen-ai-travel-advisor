@@ -22,7 +22,7 @@ This POC showcases a RAG-based chatbot architecture, integrating multiple AWS se
 Follow the steps to deploy the chatbot on your personal AWS Account:
 
 - Provide the `AWS_ACCOUNT_ID` in `.env` file
-- Obtain your SkyScanner API Key from [RapidAPI](https://rapidapi.com/) and add it to the environment variable(https://github.com/slalom/gen-ai-travel-advisor/blob/main/infra/lib/bedrock-agent-stack.ts#L41)
+- Obtain your SkyScanner API Key from [RapidAPI](https://rapidapi.com/) and add it to the environment [variable](https://github.com/slalom/gen-ai-travel-advisor/blob/main/infra/lib/bedrock-agent-stack.ts#L41)
 - Bootstrap your AWS Account `cdk bootsrap aws://<ACCOUNT_ID>/<REGION>`
 - Deploy all stacks `cdk deploy --all`  
 
