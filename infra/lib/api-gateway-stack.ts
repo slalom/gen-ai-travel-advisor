@@ -9,8 +9,17 @@ export class ApiGatewayStack extends cdk.Stack {
     super(scope, id, props);
 
     const bedrockAgentId = cdk.Fn.importValue('BedrockAgentID');
-    const agentAlias = '' // TODO: hard-coding the agent alias
-    // TODO: need a way to prepare the agent once it's deployed and create an alias programmatically and use that alias here
+    /*
+    * Amazon Bedrock Agent Lifecycle:
+    * - When an agent is first created, it starts with a draft version (DRAFT) and a test alias (TSTALIASID) pointing to the draft.
+    * - Changes to the agent apply to the draft version. Iterate and test until satisfied with the agent's behavior.
+    * - For deployment, create an alias. This creates a new agent version and points the alias to it.
+    *   Alternatively, you can assign the alias to an existing version.
+    * - Applications interact with the deployed agent by making API calls to the alias.
+    */
+
+    const agentAlias = 'TSTALIASID'
+    // TODO: need a way to create an alias programmatically and use that alias here
 
     const awsSdkLayer = new lambda.LayerVersion(this, 'AWSSDKLayer', {
         code: lambda.Code.fromAsset('lambda/common-layer/common-layer.zip'),
