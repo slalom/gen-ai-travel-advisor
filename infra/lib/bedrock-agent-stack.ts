@@ -3,11 +3,16 @@ import { Construct } from 'constructs';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as bedrock from 'aws-cdk-lib/aws-bedrock';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as fs from 'fs';
+import * as path from 'path';
+
 
 export class BedrockAgentStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    const promptFilePath = path.join(__dirname, '../agent-prompts/travel-agent-prompt.txt');
+    const promptTemplate = fs.readFileSync(promptFilePath, 'utf8');
     const knowledgeBaseId = cdk.Fn.importValue('KnowledgeBaseId');
 
     const getTimeLambda = new lambda.Function(this, 'GetTimeLambda', {
@@ -65,10 +70,26 @@ export class BedrockAgentStack extends cdk.Stack {
       description: `AI-powered travel advisor agent stack providing real-time flight prices, current time retrieval, and basic arithmetic functions for seamless user travel assistance.`,
       agentResourceRoleArn: agentRole.roleArn,
       foundationModel: 'anthropic.claude-3-sonnet-20240229-v1:0',
+      promptOverrideConfiguration: {
+        promptConfigurations: [
+            {
+                basePromptTemplate: promptTemplate.trim(),
+                promptCreationMode: 'OVERRIDDEN',
+                promptType: 'ORCHESTRATION',
+                inferenceConfiguration: {
+                        maximumLength: 512, // maximum number of tokens to allow in the generated response.
+                        temperature: 0.7, // The likelihood of the model selecting higher-probability options 
+                        //while generating a response. A lower value makes the model more likely to choose higher-probability options, 
+                        //while a higher value makes the model more likely to choose lower-probability options.
+                    },
+            }
+        ]
+      },
       knowledgeBases: [{
         description: 'knowledge base for travel advisor agent',
         knowledgeBaseId: knowledgeBaseId
       }],
+      autoPrepare: true,
       instruction: `You are a helpful AI-powered travel advisor. Your role is to assist users by answering travel-related questions, providing recommendations, and retrieving real-time information when needed. 
         You have access to the following functions:
 
