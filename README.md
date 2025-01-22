@@ -37,6 +37,7 @@ You can also invoke the chatbot using `cURL`. Replace `{API_GATEWAY_INVOKE_URL}`
 curl -X POST "https://{API_GATEWAY_INVOKE_URL}/query" \
 -H "Content-Type: application/json" \
 -d '{
-  "inputText": "Find me a roundtrip flight from Los Angeles (LAX) to New York (JFK), departing on 2025-02-14 and returning on 2025-02-18. Show prices in USD for 1 adult."
+  "inputText": "Find me a roundtrip flight from Los Angeles (LAX) to New York (JFK), departing on 2025-02-14 and returning on 2025-02-18. Show prices in USD for 1 adult.",
+  "sessionId": "{UNIQUE_UUID}"
 }'
 ```
