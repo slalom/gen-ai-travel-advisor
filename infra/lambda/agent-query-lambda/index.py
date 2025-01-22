@@ -10,6 +10,7 @@ def handler(event, context):
     try:
         body = json.loads(event.get("body", "{}"))
         input_text = body.get("inputText")
+        session_id = body.get("sessionId")
         if not input_text:
             return {
                 "statusCode": 400,
@@ -27,7 +28,9 @@ def handler(event, context):
 
         # Generate a unique session ID
         # FYI - Use the same value across requests to continue the same conversation.
-        session_id = str(uuid.uuid4())
+        if not session_id:
+            session_id = str(uuid.uuid4())  # Generate a new session ID
+            print(f"Generated new session ID: {session_id}")
 
         response = bedrock_client.invoke_agent(
             agentId=agent_id,
