@@ -4,22 +4,41 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import ChatMessage from './components/Message';
 
-export default function Home() { 
+interface Message {
+  user: string,
+  message: string,
+  key: string,
+}
 
-  const [chatHistory, setChatHistory] = useState([{user:'ai', message:'Hi! Is there anything I can help you with?', key: uuidv4()}]);
+export default function Home() {
 
-  const addMessage = (chatMessage: {user: 'ai'|'human', message: string }, history: any[]) => {
-    const newHistory = [...history, {...chatMessage, key: uuidv4()}];
+  const sessionId = uuidv4();
+
+  const initialMessageArray: Message[] = [];
+
+  const [chatHistory, setChatHistory] = useState(initialMessageArray);
+
+  const makeMessage: (a: string, b: string) => Message = (user: string, message: string) => ({
+    user, message, key: uuidv4(),
+  })
+
+  const addMessage = (chatMessage: {user: 'ai'|'human', message: string }, history: Message[]) => {
+    const newHistory: Message[] = [...history, makeMessage(chatMessage.user, chatMessage.message)];
     setChatHistory(newHistory);
     return newHistory;
   }
 
   // Call the api with the user prompt
   // Return the llm response
-  const apiCall = async (message: string, history: any[]) => {
-    // Stub, waits a moment, then replies with a default message
-    await new Promise(resolve => setTimeout(resolve, 2));
-    addMessage({user: 'ai', message:`You said: "${message}"`}, history)
+  const apiCall = async (message: string, history: Message[]) => {
+    const response = await fetch('https://3m57euft3l.execute-api.us-west-2.amazonaws.com/prod/query', {
+      method: 'POST',
+      body: JSON.stringify({
+        inputText: message,
+        sessionId,
+      }),
+    });
+    addMessage({user: 'ai', message: JSON.stringify(response)}, history);
 
   }
 

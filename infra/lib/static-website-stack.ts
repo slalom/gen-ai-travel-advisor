@@ -11,13 +11,11 @@ export class StaticWebsiteStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const awsAccountId = process.env.AWS_ACCOUNT_ID;
-
     const websiteBucket = new s3.Bucket(this, 'WebsiteBucket', {
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL, 
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
-      bucketName: `${id.toLowerCase()}-website-bucket-${awsAccountId}`, 
+      bucketName: `${id.toLowerCase()}-website-bucket-${this.account}`,
     });
   
     const originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI', {
@@ -42,7 +40,7 @@ export class StaticWebsiteStack extends cdk.Stack {
     });
 
     new s3deploy.BucketDeployment(this, 'DeployWebsite', {
-      sources: [s3deploy.Source.asset(path.join(__dirname, '../../client', 'dist'))],
+      sources: [s3deploy.Source.asset(path.join(__dirname, '../../client', '.next'))],
       destinationBucket: websiteBucket,
       distribution,
       distributionPaths: ['/*'],
