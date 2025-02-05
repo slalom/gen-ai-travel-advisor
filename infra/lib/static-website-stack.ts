@@ -7,6 +7,8 @@ import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import path from 'path';
 
+const api = 'https://3m57euft3l.execute-api.us-west-2.amazonaws.com/prod/query';
+
 export class StaticWebsiteStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -20,22 +22,15 @@ export class StaticWebsiteStack extends cdk.Stack {
     const distribution = new cloudfront.Distribution(this, 'WebsiteDistribution', {
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(websiteBucket),
-        originRequestPolicy: cloudfront.OriginRequestPolicy.CORS_S3_ORIGIN,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS, 
+      },
+      additionalBehaviors: {
+        apiOrigin: {origin: new origins.HttpOrigin((new URL(api)).hostname)},
       },
       defaultRootObject: 'index.html',
       comment: 'CloudFront distribution for private S3 static website',
     });
-
-    websiteBucket.addToResourcePolicy(
-      new iam.PolicyStatement({
-        actions: ['s3:GetObject'],
-        resources: [`${websiteBucket.bucketArn}/*`],
-        principals: [new iam.ArnPrincipal(distribution.distributionArn)],
-      }),
-    );
      
-
     new s3deploy.BucketDeployment(this, 'DeployWebsite', {
       sources: [s3deploy.Source.asset(path.join(__dirname, '../../client', 'dist'))],
       destinationBucket: websiteBucket,
