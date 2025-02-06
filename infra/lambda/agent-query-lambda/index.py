@@ -47,7 +47,10 @@ def handler(event, context):
 
         return {
             "statusCode": 200,
-            "headers": {"Content-Type": "application/json"},
+            "headers": {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                },
             "body": json.dumps(
                 {
                     "message": "Agent response retrieved successfully.",
@@ -62,7 +65,10 @@ def handler(event, context):
         # Return an error response
         return {
             "statusCode": 500,
-            "headers": {"Content-Type": "application/json"},
+            "headers": {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                },
             "body": json.dumps(
                 {
                     "message": "An error occurred while invoking the agent.",

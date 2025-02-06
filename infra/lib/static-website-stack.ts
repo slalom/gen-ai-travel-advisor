@@ -7,12 +7,10 @@ import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import path from 'path';
 
-const api = 'https://3m57euft3l.execute-api.us-west-2.amazonaws.com/prod/query';
-
 export class StaticWebsiteStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-
+    
     const websiteBucket = new s3.Bucket(this, 'WebsiteBucket', {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
@@ -25,7 +23,10 @@ export class StaticWebsiteStack extends cdk.Stack {
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS, 
       },
       additionalBehaviors: {
-        apiOrigin: {origin: new origins.HttpOrigin((new URL(api)).hostname)},
+        apiOrigin: {
+          origin: new origins.HttpOrigin('execute-api.us-west-2.amazonaws.com'),
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        },
       },
       defaultRootObject: 'index.html',
       comment: 'CloudFront distribution for private S3 static website',

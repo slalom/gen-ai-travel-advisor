@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import ChatMessage from './components/Message';
 
+const apiEndpoint = 'https://7msjsrgt93.execute-api.us-west-2.amazonaws.com/prod/';
+
 interface Message {
   user: string,
   message: string,
@@ -31,15 +33,21 @@ export default function Home() {
   // Call the api with the user prompt
   // Return the llm response
   const apiCall = async (message: string, history: Message[]) => {
-    const response = await fetch('https://3m57euft3l.execute-api.us-west-2.amazonaws.com/prod/query', {
+    const response = await fetch(`${apiEndpoint}query`, {
       method: 'POST',
+      headers: new Headers({
+        "Access-Control-Allow-Origin": '*',
+        "Content-Type": 'application/json',
+        'Access-Control-Allow-Methods':'POST,GET,OPTIONS',
+      }),
       body: JSON.stringify({
         inputText: message,
         sessionId,
       }),
     });
-    addMessage({user: 'ai', message: JSON.stringify(response)}, history);
-
+    if(response.ok) {
+      addMessage({user: 'ai', message: (await response.json()).agentResponse}, history);
+    }
   }
 
   const handleSubmit = async (formData: FormData) => {

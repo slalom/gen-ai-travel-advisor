@@ -206,13 +206,23 @@ export class BedrockAgentStack extends cdk.Stack {
             action: 'lambda:InvokeFunction',
             sourceArn: `arn:aws:bedrock:${this.region}:${this.account}:agent/${bedrockAgent.ref}`,
         });
-    })
+    });
+
+    const alias = new bedrock.CfnAgentAlias(this, 'BedrockAgentAlias', {
+      agentAliasName: 'main',
+      agentId: bedrockAgent.attrAgentId,
+    });
 
     // Output the Bedrock Agent ARN
     new cdk.CfnOutput(this, 'BedrockAgentID', {
       value: bedrockAgent.attrAgentId,
       description: 'The ID of the Bedrock Agent',
       exportName: 'BedrockAgentID'
+    });
+    new cdk.CfnOutput(this, 'BedrockAgentAliasID', {
+      value: alias.attrAgentAliasId,
+      description: 'The Alias ID of the Bedrock Agent',
+      exportName: 'BedrockAgentAliasID'
     });
   }
 }
