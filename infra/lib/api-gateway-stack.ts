@@ -9,6 +9,8 @@ export class ApiGatewayStack extends cdk.Stack {
     super(scope, id, props);
 
     const bedrockAgentId = cdk.Fn.importValue('BedrockAgentID');
+    const agentAlias = cdk.Fn.importValue('BedrockAgentAliasID');
+
     /*
     * Amazon Bedrock Agent Lifecycle:
     * - When an agent is first created, it starts with a draft version (DRAFT) and a test alias (TSTALIASID) pointing to the draft.
@@ -17,9 +19,6 @@ export class ApiGatewayStack extends cdk.Stack {
     *   Alternatively, you can assign the alias to an existing version.
     * - Applications interact with the deployed agent by making API calls to the alias.
     */
-
-    const agentAlias = 'TSTALIASID'
-    // TODO: need a way to create an alias programmatically and use that alias here
 
     const awsSdkLayer = new lambda.LayerVersion(this, 'AWSSDKLayer', {
         code: lambda.Code.fromAsset('lambda/common-layer/common-layer.zip'),
@@ -37,7 +36,7 @@ export class ApiGatewayStack extends cdk.Stack {
         timeout: cdk.Duration.minutes(8),
         environment: {
         BEDROCK_AGENT_ID: bedrockAgentId,
-        BEDROCK_AGENT_ALIAS: agentAlias, // Replace with your agent alias
+        BEDROCK_AGENT_ALIAS: agentAlias,
         REGION: this.region,
         },
     });
@@ -54,6 +53,12 @@ export class ApiGatewayStack extends cdk.Stack {
     const api = new apigateway.RestApi(this, 'TravelAdvisorApi', {
       restApiName: 'Travel Advisor Service',
       description: 'API to Query Bedrock Agent',
+      defaultCorsPreflightOptions: {
+        allowOrigins: apigateway.Cors.ALL_ORIGINS,
+        allowCredentials: true,
+        allowHeaders: [...apigateway.Cors.DEFAULT_HEADERS, 'Access-Control-Allow-Origin', 'Access-Control-Allow-Methods'],
+        allowMethods: [... apigateway.Cors.ALL_METHODS, 'OPTIONS']
+      }
     });
 
     const queryResource = api.root.addResource('query');
@@ -62,6 +67,7 @@ export class ApiGatewayStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'ApiUrl', {
       value: api.url,
       description: 'API Gateway endpoint URL',
+      exportName: 'ApiUrl'
     });
   }
 }

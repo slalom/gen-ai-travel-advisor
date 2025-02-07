@@ -100,11 +100,12 @@ export class KnowledgeBaseStack extends cdk.Stack {
 
       // S3 bucket for knowledge base data
       const knowledgeBaseBucket = new s3.Bucket(this, 'KnowledgeBaseBucket', {
-        bucketName: 'gen-ai-travel-advisor-kb-bucket',
+        bucketName: `gen-ai-travel-advisor-kb-bucket-${this.account}`,
         blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
         encryption: s3.BucketEncryption.S3_MANAGED,
         versioned: false,
         removalPolicy: cdk.RemovalPolicy.DESTROY,
+        autoDeleteObjects: true,
       });
   
       // Deploy the knowledge base data to the bucket
@@ -236,9 +237,12 @@ export class KnowledgeBaseStack extends cdk.Stack {
      const crs =  new cdk.CustomResource(this, 'OpenSearchIndexResource', {
         serviceToken: provider.serviceToken,
         properties: {
-          IndexName: openSearchIndex,
+          index: openSearchIndex,
+          endpoint: vectorSearchCollection.attrCollectionEndpoint,
         },
       });
+
+      crs.node.addDependency(vectorSearchCollection);
     
       // Create Knowledge Base
     const kb = new bedrock.CfnKnowledgeBase(this, 'KnowledgeBase', {
@@ -256,15 +260,16 @@ export class KnowledgeBaseStack extends cdk.Stack {
             opensearchServerlessConfiguration: {
             collectionArn: vectorSearchCollection.attrArn,
             fieldMapping: {
-                metadataField: 'metadata',
-                textField: 'text',
-                vectorField: 'embeddings',
+                metadataField: 'AMAZON_BEDROCK_METADATA',
+                textField: 'AMAZON_BEDROCK_TEXT_CHUNK',
+                vectorField: 'bedrock-knowledge-base-default-vector',
               },
             vectorIndexName: openSearchIndex,
             },
         },
     });
-    kb.node.addDependency(crs)
+    kb.node.addDependency(vectorSearchCollection);
+    kb.node.addDependency(crs);
 
     const dataSource = new bedrock.CfnDataSource(this, 'TravelAdvisorDataSource', {
        dataSourceConfiguration: {
@@ -277,7 +282,7 @@ export class KnowledgeBaseStack extends cdk.Stack {
        name: 'TravelAdvisorDataSource'
       });
 
-      dataSource.addDependency(kb)
+    dataSource.addDependency(kb);
 
     new cdk.CfnOutput(this, 'OpenSearchCollectionArn', {
       value: vectorSearchCollection.attrArn,

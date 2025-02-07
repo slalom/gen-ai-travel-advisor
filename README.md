@@ -25,6 +25,8 @@ Follow the steps to deploy the chatbot on your personal AWS Account:
 - Obtain your SkyScanner API Key from [RapidAPI](https://rapidapi.com/) and add it to the environment [variable](https://github.com/slalom/gen-ai-travel-advisor/blob/main/infra/lib/bedrock-agent-stack.ts#L41)
 - Bootstrap your AWS Account `cdk bootsrap aws://<ACCOUNT_ID>/<REGION>`
 - Deploy all stacks `cdk deploy --all`  
+- Update the api constant in `client/app/page.tsx` with the deployed api endpoint
+- Build the client `next build` and deploy `cdk deploy RAGChatBotWebsite`
 
 ## Example Prompts
 - Find me a roundtrip flight from Los Angeles (LAX) to New York (JFK), departing on 2025-02-14 and returning on 2025-02-18. Show prices in USD for 1 adult.

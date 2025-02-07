@@ -10,37 +10,28 @@ import path from 'path';
 export class StaticWebsiteStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-
-    const awsAccountId = process.env.AWS_ACCOUNT_ID;
-
+    
     const websiteBucket = new s3.Bucket(this, 'WebsiteBucket', {
-      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL, 
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
-      bucketName: `${id.toLowerCase()}-website-bucket-${awsAccountId}`, 
+      bucketName: `${id.toLowerCase()}-website-bucket-${this.account}`,
     });
   
-    const originAccessIdentity = new cloudfront.OriginAccessIdentity(this, 'OAI', {
-      comment: 'OAI for CloudFront to access S3 bucket securely',
-    });
-
-    websiteBucket.addToResourcePolicy(
-      new iam.PolicyStatement({
-        actions: ['s3:GetObject'],
-        resources: [`${websiteBucket.bucketArn}/*`],
-        principals: [new iam.CanonicalUserPrincipal(originAccessIdentity.cloudFrontOriginAccessIdentityS3CanonicalUserId)],
-      }),
-    );
-
     const distribution = new cloudfront.Distribution(this, 'WebsiteDistribution', {
       defaultBehavior: {
-        origin: new origins.S3Origin(websiteBucket, { originAccessIdentity }), // TODO: S3Origin is deprecated - need to add other way to create distribution
+        origin: origins.S3BucketOrigin.withOriginAccessControl(websiteBucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS, 
+      },
+      additionalBehaviors: {
+        apiOrigin: {
+          origin: new origins.HttpOrigin('execute-api.us-west-2.amazonaws.com'),
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        },
       },
       defaultRootObject: 'index.html',
       comment: 'CloudFront distribution for private S3 static website',
     });
-
+     
     new s3deploy.BucketDeployment(this, 'DeployWebsite', {
       sources: [s3deploy.Source.asset(path.join(__dirname, '../../client', 'dist'))],
       destinationBucket: websiteBucket,
