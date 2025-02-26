@@ -54,6 +54,12 @@ export class ApiGatewayStack extends cdk.Stack {
     const api = new apigateway.RestApi(this, 'TravelAdvisorApi', {
       restApiName: 'Travel Advisor Service',
       description: 'API to Query Bedrock Agent',
+      defaultCorsPreflightOptions: {
+        allowOrigins: apigateway.Cors.ALL_ORIGINS,
+        allowCredentials: true,
+        allowHeaders: [...apigateway.Cors.DEFAULT_HEADERS, 'Access-Control-Allow-Origin', 'Access-Control-Allow-Methods'],
+        allowMethods: [... apigateway.Cors.ALL_METHODS, 'OPTIONS']
+      }
     });
 
     const queryResource = api.root.addResource('query');
