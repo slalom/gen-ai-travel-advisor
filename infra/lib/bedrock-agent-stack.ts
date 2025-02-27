@@ -40,7 +40,7 @@ export class BedrockAgentStack extends cdk.Stack {
         runtime: lambda.Runtime.PYTHON_3_9,
         handler: 'index.handler',
         code: lambda.Code.fromAsset('lambda/flight'),
-        layers: [requestsLayer],
+        layers: [requestsLayer], 
         timeout: cdk.Duration.minutes(5),
         environment: {
         API_KEY: '', // add API KEY from https://rapidapi.com/hub to call SkyScanner APIs
@@ -69,7 +69,7 @@ export class BedrockAgentStack extends cdk.Stack {
       agentName: 'gen-ai-travel-advisor',
       description: `AI-powered travel advisor agent stack providing real-time flight prices, current time retrieval, and basic arithmetic functions for seamless user travel assistance.`,
       agentResourceRoleArn: agentRole.roleArn,
-      foundationModel: 'anthropic.claude-3-sonnet-20240229-v1:0',
+      foundationModel: 'anthropic.claude-3-5-sonnet-20240620-v1:0',
       promptOverrideConfiguration: {
         promptConfigurations: [
             {
